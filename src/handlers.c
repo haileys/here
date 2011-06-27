@@ -53,7 +53,7 @@ void process_request(server_t* server, client_t* client)
             char try[base_len + strlen(server->index_files[i]) + 1];
             sprintf(try, "%s%s", base, server->index_files[i]);
             if(stat(try, &buf) == 0) {
-                dispatch_request(server, client, try);
+                dispatch_request(server, client, headers, try);
                 http_free_request_header(headers);
                 return;
             }
@@ -63,7 +63,7 @@ void process_request(server_t* server, client_t* client)
         http_free_request_header(headers);
         return;
     } else if(buf.st_mode & S_IFREG) {    
-        dispatch_request(server, client, base);
+        dispatch_request(server, client, headers, base);
         http_free_request_header(headers);
         return;
     } else {
@@ -74,12 +74,12 @@ void process_request(server_t* server, client_t* client)
     }
 }
 
-void dispatch_request(server_t* server, client_t* client, char* real_path)
+void dispatch_request(server_t* server, client_t* client, http_request_header_t* headers, char* real_path)
 {
     char* extension = strrchr(strrchr(real_path, '/'), '.');
     
     for(int i = 0; i < server->filters_length; i++) {
-        if(server->filters[i](server, client, real_path, extension)) {
+        if(server->filters[i](server, client, headers, real_path, extension)) {
             return;
         }
     }

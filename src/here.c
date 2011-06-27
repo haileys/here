@@ -73,8 +73,8 @@ int main(int argc, char** argv)
             if(err) {
                 fatal("couldn't load module %s: %s", argv[i], err);
             }
-            void(*mod_init_fn)() = (void(*)())(size_t)dlsym(mod_handle, "_here_init");
-            filter_t mod_dispatch_fn = (filter_t)(size_t)dlsym(mod_handle, "_here_dispatch");
+            void(*mod_init_fn)() = (void(*)())(size_t)dlsym(mod_handle, "here_init");
+            filter_t mod_dispatch_fn = (filter_t)(size_t)dlsym(mod_handle, "here_dispatch");
             if(mod_dispatch_fn == NULL) {
                 fatal("couldn't load module %s: no symbol here_dispatch", mod_name);
             }
@@ -85,6 +85,7 @@ int main(int argc, char** argv)
                 index_files = realloc(filters, filters_capacity *= 2);
             }
             filters[filters_length++] = mod_dispatch_fn;
+            continue;
         }
         fatal("unrecognized argument: %s", argv[i]);
     }

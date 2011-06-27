@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "http.h"
 
 typedef struct client {    
     int sockfd;
@@ -14,7 +15,7 @@ typedef struct client {
 
 struct server;
 
-typedef int(*filter_t)(struct server*, client_t*, char*, char*);
+typedef int(*filter_t)(struct server*, client_t*, http_request_header_t*, char*, char*);
 
 typedef struct server {
     int listenfd;
