@@ -5,11 +5,19 @@
 #include "net.h"
 #include "util.h"
 
-server_t* create_server(int port, char* dir, void(*handler)(server_t*, client_t*))
+server_t* create_server(
+    int port, char* dir,
+    char** index_files, int index_files_length,
+    filter_t* filters, int filters_length,
+    void(*handler)(server_t*, client_t*))
 {
     server_t* server = (server_t*)malloc(sizeof(server_t));
     server->port = port;
-    server->dir = dir;
+    realpath(dir, server->dir);
+    server->index_files = index_files;
+    server->index_files_length = index_files_length;
+    server->filters = filters;
+    server->filters_length = filters_length;
     server->handler = handler;
     server->current = NULL;
     
@@ -37,6 +45,7 @@ void free_server(server_t* server)
     }    
     shutdown(server->listenfd, SHUT_RDWR);
     close(server->listenfd);
+    free(server->index_files);
     free(server);
 }
 
