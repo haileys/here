@@ -13,6 +13,7 @@ typedef enum http_version {
 } http_version_t;
 
 typedef struct http_header_field {
+    struct http_header_field* next;
     char* name;
     char* value;
 } http_header_field_t;
@@ -21,12 +22,11 @@ typedef struct http_request_header {
     http_method_t method;
     char* uri;
     http_version_t version;
-    int field_count;
     http_header_field_t* fields;
 } http_request_header_t;
 
 void http_free_request_header(http_request_header_t* header);
-http_request_header_t* http_parse_headers(char* buff, size_t length, int* status, char** error);
+int http_parse_headers(char* buff, int length, http_request_header_t** headers_out, int* status, char** error);
 
 char* http_error_response(char* buff, int error_code, char* message);
 

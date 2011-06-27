@@ -6,6 +6,7 @@
 #include <limits.h>
 #include "util.h"
 #include "net.h"
+#include "http.h"
 
 static server_t* server;
 
@@ -14,8 +15,23 @@ static void connection_handler(server_t* s, client_t* client)
     char buff[1024];
     int n = recv(client->sockfd, buff, 1024, 0);
     char out[1024];
-    http_error_response(out, 200, "OK");
-    send(client->sockfd, out, strlen(out), 0);
+    int status = 0;
+    char* message = NULL;
+    http_request_header_t* headers;
+    int offset = http_parse_headers(buff, n, &headers, &status, &message);
+    if(message != NULL) {
+        http_error_response(out, status, message);
+        send(client->sockfd, out, strlen(out), 0);
+        return;
+    }
+    printf(">> %s\n", headers->uri);
+    char msg[1000] = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n";
+    send(client->sockfd, msg, strlen(msg), 0);
+    for(http_header_field_t* f = headers->fields; f != NULL; f = f->next) {
+        sprintf(msg, "<strong>%s</strong> => %s<br />", f->name, f->value);
+        send(client->sockfd, msg, strlen(msg), 0);
+    }
+    http_free_request_header(headers);
 }
 
 static void sigint(int n)
