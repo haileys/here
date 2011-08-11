@@ -29,7 +29,7 @@ void process_request(server_t* server, client_t* client)
         http_free_request_header(headers);
         return;
     }
-    printf(">> %s\n", headers->uri);
+    printf("%s %s\n", http_method_str(headers->method), headers->uri);
     
     char uripath[strlen(server->dir) + strlen(headers->uri) + 1];
     sprintf(uripath, "%s%s", server->dir, headers->uri);

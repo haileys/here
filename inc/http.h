@@ -27,7 +27,7 @@ typedef struct http_request_header {
 
 void http_free_request_header(http_request_header_t* header);
 int http_parse_headers(char* buff, int length, http_request_header_t** headers_out, int* status, char** error);
-
+char* http_method_str(http_method_t method);
 char* http_error_response(char* buff, int error_code, char* message);
 
 #endif

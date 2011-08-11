@@ -19,6 +19,18 @@ void http_free_request_header(http_request_header_t* header)
     free(header);
 }
 
+char* http_method_str(http_method_t method)
+{
+    switch(method)
+    {
+        case HTTP_GET: return "GET";
+        case HTTP_POST: return "POST";
+        case HTTP_HEAD: return "HEAD";
+        default:
+            return "?";
+    }
+}
+
 enum parser_state
 {
     P_NAME,
