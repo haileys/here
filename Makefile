@@ -2,3 +2,4 @@ CFLAGS=-ldl -g --std=c99 -pedantic -Wall -Wshadow -Wpointer-arith -Wcast-qual -W
 
 all:
 	gcc $(CFLAGS) -o here -iquote inc/ src/*.c src/platform/_autodetect.c
+	rm -rf *.dSYM
