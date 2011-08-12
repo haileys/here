@@ -1,7 +1,11 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <stdio.h>
 #include <limits.h>
+#ifdef __linux__
+    #include <linux/limits.h>
+#endif
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
