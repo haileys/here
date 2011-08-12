@@ -65,7 +65,7 @@ void process_request(server_t* server, client_t* client)
         send(client->sockfd, out, strlen(out), 0);
         http_free_request_header(headers);
         return;
-    } else if(buf.st_mode & S_IFREG) {
+    } else if(S_ISREG(buf.st_mode)) {
         dispatch_request(server, client, headers, base);
         http_free_request_header(headers);
         return;
