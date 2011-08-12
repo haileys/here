@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <dlfcn.h>
+#include <signal.h>
 #include <limits.h>
 #include "handlers.h"
 #include "util.h"
