@@ -11,6 +11,7 @@
 #include <unistd.h>
 #ifdef __linux__
     #include <sys/sendfile.h>
+    #include <linux/stat.h>
 #endif
 #include "handlers.h"
 #include "platform.h"
