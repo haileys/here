@@ -1,0 +1,1 @@
+You must configure PHP with at least `--enable-embed=shared`, and move libphp5.so into the same directory the `here` executable is in.

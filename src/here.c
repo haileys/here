@@ -12,7 +12,8 @@
 static server_t* server;
 
 static void sigint(int n)
-{    
+{
+    n = n;
     printf("Shutting down... ");
     free_server(server);
     printf("Bye.\n");
